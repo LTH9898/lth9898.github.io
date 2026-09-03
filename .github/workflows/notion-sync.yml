@@ -31,6 +31,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
       - name: Sync posts from Notion
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -39,18 +44,42 @@ jobs:
           python3 tools/notion_sync.py \
             ${{ inputs.force && '--force' || '' }}
 
-      - name: Commit any changes
+      - name: Look for changes
+        id: changes
         run: |
-          set -e
+          mkdir -p _posts images/blog
+          git add -A -- _posts images/blog
+          if git diff --cached --quiet; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            echo 'no post changes'
+          else
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          fi
+
+      # This job pushes straight to main, which build.yml ignores, so a post
+      # that breaks the site would otherwise only fail once GitHub Pages built
+      # it -- after it was already committed. Build here instead, and let a
+      # failure stop the push: the bad post stays in the runner and the live
+      # site keeps the last good version.
+      - name: Build the site with the synced posts
+        if: steps.changes.outputs.changed == 'true'
+        run: bundle exec jekyll build --trace
+
+      - name: Check every post rendered
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          posts=$(find _posts \( -name '*.md' -o -name '*.markdown' \) | wc -l | tr -d ' ')
+          # Post pages sit at _site/blog/<slug>/index.html; the /blog/ index
+          # itself is one level up. Counting sidesteps having to reproduce
+          # Jekyll's slug rules here.
+          pages=$(find _site/blog -mindepth 2 -name index.html | wc -l | tr -d ' ')
+          echo "$posts post(s), $pages rendered page(s)"
+          test "$posts" = "$pages"
+
+      - name: Commit the synced posts
+        if: steps.changes.outputs.changed == 'true'
+        run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          # git add errors on a path that has never existed, which is the case
-          # until the first post syncs.
-          mkdir -p _posts images/blog
-          git add -A _posts images/blog
-          if git diff --cached --quiet; then
-            echo 'no post changes'
-            exit 0
-          fi
           git commit -m 'Sync blog posts from Notion'
           git push

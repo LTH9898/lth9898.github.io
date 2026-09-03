@@ -93,6 +93,11 @@ Write math as Notion equations (`Ctrl+Shift+E` inline, or `/equation` for a
 block) rather than typing dollar signs, so it converts cleanly. Callouts become
 blockquotes and toggles become collapsible `<details>` sections.
 
+The sync builds the site before it commits, and pushes only if every post
+rendered. A post that would break the build stays in the runner and the live
+site keeps its last good version, so the workflow run goes red instead of the
+site going down. Fix the page in Notion and re-run.
+
 To check the conversion before it reaches the site:
 
 ```bash
