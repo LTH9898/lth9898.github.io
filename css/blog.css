@@ -290,3 +290,15 @@ a.tag:hover,
     text-align: left;
   }
 }
+
+/* ------------------------------------------------------- Publication teasers */
+
+/*
+  The teaser <img> tags carry width/height attributes so the browser can
+  reserve the right box before a lazy-loaded image arrives. style.css sets
+  width:100% but no height, which would otherwise let the height attribute
+  through as a fixed pixel height and squash the image.
+*/
+.features .feature-item .image img {
+  height: auto;
+}
