@@ -261,6 +261,33 @@ table.invisible tbody.invisible tr.invisible:nth-child(2n + 1) {
   text-decoration: none;
 }
 
+/* --------------------------------------------------------------------- Media */
+
+.media-figure {
+  margin: 1.75em 0 0 0;
+}
+
+/*
+  The clip is portrait (720x1280); left unconstrained it would tower over the
+  card, so cap it and let the aspect ratio do the rest.
+*/
+.media-portrait {
+  background: #000;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--card-shadow-soft);
+  display: block;
+  height: auto;
+  max-width: 300px;
+  width: 100%;
+}
+
+.media-figure figcaption {
+  color: var(--ink-faint);
+  font-size: 0.85em;
+  margin-top: 0.7em;
+  max-width: 300px;
+}
+
 /* ------------------------------------------------------------------ Sidebar */
 
 /*
