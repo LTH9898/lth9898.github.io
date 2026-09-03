@@ -46,6 +46,59 @@ What you can use in a post:
 Math is rendered by [KaTeX](https://katex.org/) in the browser; code is
 highlighted at build time by [Rouge](https://github.com/rouge-ruby/rouge).
 
+## Writing in Notion instead
+
+Posts can also come from a Notion database, so notes written there land on the
+blog without a copy-paste step. `tools/notion_sync.py` reads the database
+through the Notion API and writes `_posts/YYYY-MM-DD-slug.md` plus any images,
+and `.github/workflows/notion-sync.yml` runs it daily and on demand.
+
+Notion's own `Export -> Markdown & CSV` is not used: it writes `$$...$$` for
+inline math as well as display math, so inline formulas come out as centred
+blocks, and its image links point at URLs that expire after an hour. The
+script emits `$...$` inline and downloads every image into the repo.
+
+### One-time setup
+
+1. Create an internal integration at
+   <https://www.notion.so/my-integrations> and copy its token.
+2. Make a Notion database for posts with these properties:
+
+   | Property | Type | Required | Meaning |
+   | --- | --- | --- | --- |
+   | `Name` | Title | yes | Post title |
+   | `Publish` | Checkbox | yes | Only ticked pages sync |
+   | `Date` | Date | no | Post date; defaults to the page's creation date |
+   | `Tags` | Multi-select | no | Becomes `tags:` in the front matter |
+   | `Description` | Text | no | One-line blurb in the post list |
+   | `Slug` | Text | no | Overrides the slug derived from the title |
+
+3. In the database's `...` menu, choose **Connections -> Connect to** and pick
+   the integration. Without this the API cannot see the database.
+4. Copy the database id -- in the database URL
+   `notion.so/<workspace>/<database id>?v=...`, it is the 32-character part
+   before the `?`.
+5. Add two repository secrets under **Settings -> Secrets and variables ->
+   Actions**: `NOTION_TOKEN` and `NOTION_DATABASE_ID`.
+
+### Day to day
+
+Write the note in Notion, tick `Publish`, and either wait for the daily run or
+trigger **Actions -> Notion sync -> Run workflow**. Editing the page and
+re-running updates the post in place; unticking `Publish` deletes it again.
+Posts the script owns carry a `notion_page_id` in their front matter, and
+hand-written posts without one are never touched.
+
+Write math as Notion equations (`Ctrl+Shift+E` inline, or `/equation` for a
+block) rather than typing dollar signs, so it converts cleanly. Callouts become
+blockquotes and toggles become collapsible `<details>` sections.
+
+To check the conversion before it reaches the site:
+
+```bash
+NOTION_TOKEN=... NOTION_DATABASE_ID=... python3 tools/notion_sync.py --dry-run
+```
+
 ## Previewing locally
 
 Optional — only needed if you want to see a post before pushing.
@@ -68,4 +121,5 @@ Then open http://localhost:4000.
 - `images/banners/banner.jpg` — home banner (referenced in `css/style.css`)
 - `images/pub/` — paper teaser images, `images/blog/` — post images
 - `docs/bib/` — BibTeX files
+- `tools/notion_sync.py` — Notion → `_posts/` sync
 - `images/logo.png` — favicon and footer logo

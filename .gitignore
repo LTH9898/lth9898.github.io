@@ -15,3 +15,7 @@ vendor/
 # (e.g. images/hobby.MOV -> images/misc/climbing.mp4)
 *.MOV
 *.mov
+
+# Python
+__pycache__/
+*.pyc
