@@ -1210,7 +1210,7 @@ input[type='button']:disabled,
 
 #about:before {
   background-image: url('../images/banners/banner.jpg');
-  background-position: top left;
+  background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
   content: '';
