@@ -1,0 +1,43 @@
+title: Taehoon Lee
+description: Homepage of Taehoon Lee.
+url: https://lth9898.github.io
+baseurl: ''
+lang: en
+
+# Blog posts live at /blog/<slug>/
+permalink: /blog/:title/
+
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  hard_wrap: false
+  # Leave $$...$$ untouched so KaTeX renders it in the browser.
+  math_engine: null
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+plugins:
+  - jekyll-feed
+
+feed:
+  path: feed.xml
+
+defaults:
+  - scope:
+      path: ''
+      type: posts
+    values:
+      layout: post
+      math: true
+
+exclude:
+  - README.md
+  - LICENSE.txt
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .prettierrc
+  - .prettierignore

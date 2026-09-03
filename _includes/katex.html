@@ -1,0 +1,40 @@
+{% comment %}
+  Math rendering.
+
+  kramdown leaves inline $...$ alone, and with `math_engine: null` it emits
+  display math verbatim inside <div class="kdmath">$$...$$</div>. Older
+  kramdown builds instead emit <script type="math/tex">; the shim below
+  normalises that shape so this works whichever version GitHub Pages runs.
+{% endcomment %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+  integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+  integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+  // Deferred scripts above run before DOMContentLoaded, so KaTeX is ready here.
+  document.addEventListener('DOMContentLoaded', function () {
+    var body = document.getElementById('post-body');
+    if (!body || typeof renderMathInElement !== 'function') return;
+
+    // Normalise <script type="math/tex"> into plain delimited text.
+    body.querySelectorAll('script[type^="math/tex"]').forEach(function (s) {
+      var display = s.type.indexOf('mode=display') !== -1;
+      var span = document.createElement(display ? 'div' : 'span');
+      span.textContent = display ? '$$' + s.textContent + '$$' : '$' + s.textContent + '$';
+      s.parentNode.replaceChild(span, s);
+    });
+
+    renderMathInElement(body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '\\[', right: '\\]', display: true },
+        { left: '$', right: '$', display: false },
+        { left: '\\(', right: '\\)', display: false }
+      ],
+      ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+      throwOnError: false
+    });
+  });
+</script>

@@ -1,0 +1,45 @@
+{% comment %}
+  On the home page the nav scrolls to sections; everywhere else it has to
+  navigate home first. js/init.js ignores any href not starting with '#',
+  so scrolly/scrollzer leave the cross-page links alone.
+{% endcomment %}
+{% assign home = '/' | relative_url %}
+{% if page.url == '/' %}{% assign p = '' %}{% else %}{% assign p = home %}{% endif %}
+<section id="header" class="skel-layers-fixed">
+  <header>
+    <span class="image avatar"
+      ><img src="{{ '/images/avatars/profile.jpg' | relative_url }}" alt="{{ site.title }}"></span>
+    <h1><a href="{{ home }}" class="plain">{{ site.title }}</a></h1>
+  </header>
+  <nav id="nav">
+    <ul>
+      <li><a href="{{ p }}#about"{% if page.url == '/' %} class="active"{% endif %}>About</a></li>
+      <li><a href="{{ p }}#news">News</a></li>
+      <li><a href="{{ p }}#publications">Publications</a></li>
+      <li><a href="{{ '/blog/' | relative_url }}"{% if page.blog_active %} class="active"{% endif %}>Blog</a></li>
+    </ul>
+  </nav>
+  <footer>
+    <ul class="icons">
+      <li>
+        <a href="https://github.com/lth9898"
+          target="_blank" rel="noopener noreferrer"
+          class="icon fa-github"><span class="label">GitHub</span></a>
+      </li>
+      <li>
+        <a href="https://www.linkedin.com/in/taehoon-lee-7187432b0/"
+          target="_blank" rel="noopener noreferrer"
+          class="icon fa-linkedin"><span class="label">LinkedIn</span></a>
+      </li>
+      <li>
+        <a href="https://scholar.google.com/citations?user=VXyBknIAAAAJ"
+          target="_blank" rel="noopener noreferrer"
+          class="icon fa-google-scholar"><span class="label">Google Scholar</span></a>
+      </li>
+      <li>
+        <a href="#" id="email-link" class="icon fa-envelope"
+          data-user="dlxogns183" data-domain="kaist.ac.kr"><span class="label">Email</span></a>
+      </li>
+    </ul>
+  </footer>
+</section>

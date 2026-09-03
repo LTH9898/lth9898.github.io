@@ -1,0 +1,292 @@
+/*
+  Blog additions on top of the Read Only template (css/style.css).
+  Loaded after the skel stylesheets, so plain selectors win where they overlap.
+*/
+
+/* ---------------------------------------------------------------- Post list */
+
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.post-list-item {
+  border-top: solid 1px #e6e6e6;
+  display: flex;
+  gap: 1.5em;
+  padding: 1.5em 0;
+}
+
+.post-list-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.post-list-date {
+  color: #999;
+  flex: 0 0 7.5em;
+  font-size: 0.85em;
+  letter-spacing: 0.05em;
+  padding-top: 0.35em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.post-list-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.post-list-title {
+  border-bottom: 0;
+  color: #414f54;
+  display: inline-block;
+  font-size: 1.1em;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.post-list-title:hover {
+  color: #a03b3b;
+}
+
+.post-list-desc {
+  color: #777;
+  font-size: 0.9em;
+  margin: 0.4em 0 0 0;
+}
+
+.post-list-tags {
+  margin: 0.6em 0 0 0;
+}
+
+.post-list-more {
+  margin: 1.5em 0 0 0;
+}
+
+.post-list-compact .post-list-item {
+  padding: 1em 0;
+}
+
+.post-empty {
+  color: #999;
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------- Tags */
+
+.tag {
+  background: #f0efee;
+  border-bottom: 0;
+  border-radius: 3px;
+  color: #777;
+  display: inline-block;
+  font-size: 0.75em;
+  letter-spacing: 0.05em;
+  margin: 0 0.35em 0.35em 0;
+  padding: 0.25em 0.7em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+a.tag:hover,
+.tag.is-active {
+  background: #a03b3b;
+  color: #fff;
+}
+
+.tag-filter {
+  border-bottom: solid 1px #e6e6e6;
+  margin: 0 0 1.75em 0;
+  padding: 0 0 1.25em 0;
+}
+
+/* --------------------------------------------------------------- Post body */
+
+.post-meta {
+  color: #999;
+  font-size: 0.9em;
+  margin: 0.5em 0 0 0;
+}
+
+.post-meta .post-tags {
+  margin-left: 0.75em;
+}
+
+.post-body {
+  line-height: 1.75;
+}
+
+.post-body > *:first-child {
+  margin-top: 0;
+}
+
+.post-body h2 {
+  font-size: 1.4em;
+  margin: 2em 0 0.75em 0;
+}
+
+.post-body h3 {
+  font-size: 1.15em;
+  margin: 1.75em 0 0.6em 0;
+}
+
+.post-body h4 {
+  font-size: 1em;
+  margin: 1.5em 0 0.5em 0;
+}
+
+.post-body img {
+  display: block;
+  height: auto;
+  margin: 1.5em auto;
+  max-width: 100%;
+}
+
+.post-body figure {
+  margin: 1.5em 0;
+}
+
+.post-body figcaption {
+  color: #999;
+  font-size: 0.85em;
+  text-align: center;
+}
+
+.post-body blockquote {
+  border-left: solid 4px #e6e6e6;
+  color: #777;
+  font-style: normal;
+  margin: 1.5em 0;
+  padding: 0.25em 0 0.25em 1.25em;
+}
+
+.post-body table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.post-body hr {
+  border-top: solid 1px #e6e6e6;
+  margin: 2.5em 0;
+}
+
+/* Inline code and code blocks */
+
+.post-body code {
+  background: #f4f3f2;
+  border-radius: 3px;
+  font-size: 0.88em;
+  padding: 0.15em 0.4em;
+}
+
+.post-body pre {
+  background: #2d2d2d;
+  border-radius: 4px;
+  line-height: 1.5;
+  margin: 1.5em 0;
+  overflow-x: auto;
+  padding: 1em 1.25em;
+}
+
+.post-body pre code {
+  background: none;
+  color: #e8e6e3;
+  font-size: 0.85em;
+  padding: 0;
+}
+
+.post-body div.highlight,
+.post-body figure.highlight {
+  margin: 1.5em 0;
+}
+
+.post-body div.highlight pre,
+.post-body figure.highlight pre {
+  margin: 0;
+}
+
+/* Rouge tokens (base16 dark) */
+.highlight .c, .highlight .c1, .highlight .cm, .highlight .cs { color: #8a8a8a; font-style: italic; }
+.highlight .k, .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kt { color: #c397d8; }
+.highlight .o, .highlight .ow { color: #d4d4d4; }
+.highlight .s, .highlight .s1, .highlight .s2, .highlight .se, .highlight .sb, .highlight .sd { color: #b9ca4a; }
+.highlight .n, .highlight .na, .highlight .nx { color: #e8e6e3; }
+.highlight .nb, .highlight .bp { color: #7aa6da; }
+.highlight .nf, .highlight .nd { color: #7aa6da; }
+.highlight .nc, .highlight .nn { color: #e7c547; }
+.highlight .m, .highlight .mi, .highlight .mf, .highlight .mh { color: #e78c45; }
+.highlight .p { color: #d4d4d4; }
+.highlight .err { color: #d54e53; }
+.highlight .gd { color: #d54e53; }
+.highlight .gi { color: #b9ca4a; }
+
+/* Math: keep long display equations scrollable instead of overflowing */
+.post-body .katex-display {
+  margin: 1.5em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25em 0;
+}
+
+/* ---------------------------------------------------------------- Post nav */
+
+.post-nav {
+  align-items: baseline;
+  border-top: solid 1px #e6e6e6;
+  display: flex;
+  font-size: 0.9em;
+  gap: 1em;
+  justify-content: space-between;
+  margin: 3em 0 0 0;
+  padding: 1.5em 0 0 0;
+}
+
+.post-nav-prev,
+.post-nav-next {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.post-nav-next {
+  text-align: right;
+}
+
+.post-nav-home {
+  flex: 0 0 auto;
+  color: #999;
+}
+
+/* --------------------------------------------------------------- Sidebar */
+
+#header > header h1 a.plain {
+  border-bottom: 0;
+  color: inherit;
+}
+
+/* ---------------------------------------------------------------- Narrow */
+
+@media screen and (max-width: 736px) {
+  .post-list-item {
+    display: block;
+  }
+
+  .post-list-date {
+    display: block;
+    padding: 0 0 0.4em 0;
+  }
+
+  .post-nav {
+    display: block;
+  }
+
+  .post-nav-prev,
+  .post-nav-next,
+  .post-nav-home {
+    display: block;
+    margin: 0 0 0.6em 0;
+    text-align: left;
+  }
+}

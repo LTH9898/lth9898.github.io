@@ -1,0 +1,76 @@
+---
+layout: default
+title: Blog
+permalink: /blog/
+blog_active: true
+description: Notes and write-ups by Taehoon Lee.
+---
+<section id="blog">
+  <div class="container">
+    <header class="major">
+      <h2>Blog</h2>
+      <p>Notes on what I am reading and working through.</p>
+    </header>
+
+    {% assign tags = site.tags | sort %}
+    {% if tags.size > 0 %}
+    <div class="tag-filter">
+      <a class="tag tag-all is-active" href="#" data-tag="*">All ({{ site.posts.size }})</a>
+      {% for tag in tags %}
+      <a class="tag" href="#tag-{{ tag[0] | slugify }}" data-tag="{{ tag[0] | slugify }}">{{ tag[0] }} ({{ tag[1].size }})</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if site.posts.size == 0 %}
+    <p class="post-empty">No posts yet.</p>
+    {% else %}
+    <ul class="post-list">
+      {% for post in site.posts %}
+      <li class="post-list-item" data-tags="{% for t in post.tags %}{{ t | slugify }} {% endfor %}">
+        <time class="post-list-date" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b. %-d, %Y' }}</time>
+        <div class="post-list-body">
+          <a class="post-list-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          {% if post.description %}<p class="post-list-desc">{{ post.description }}</p>
+          {% else %}<p class="post-list-desc">{{ post.content | strip_html | truncate: 160 }}</p>{% endif %}
+          {% if post.tags.size > 0 %}
+          <p class="post-list-tags">{% for t in post.tags %}<span class="tag">{{ t }}</span>{% endfor %}</p>
+          {% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  // Client-side tag filtering for the post list.
+  (function () {
+    var filter = document.querySelector('.tag-filter');
+    if (!filter) return;
+    var items = Array.prototype.slice.call(document.querySelectorAll('.post-list-item'));
+
+    function apply(tag) {
+      items.forEach(function (li) {
+        var tags = (li.dataset.tags || '').split(/\s+/);
+        li.hidden = tag !== '*' && tags.indexOf(tag) === -1;
+      });
+      filter.querySelectorAll('.tag').forEach(function (a) {
+        a.classList.toggle('is-active', a.dataset.tag === tag);
+      });
+    }
+
+    filter.addEventListener('click', function (e) {
+      var a = e.target.closest('.tag');
+      if (!a) return;
+      e.preventDefault();
+      var tag = a.dataset.tag;
+      history.replaceState(null, '', tag === '*' ? location.pathname : '#tag-' + tag);
+      apply(tag);
+    });
+
+    var hash = location.hash.match(/^#tag-(.+)$/);
+    apply(hash ? hash[1] : '*');
+  })();
+</script>
