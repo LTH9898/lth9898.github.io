@@ -1,0 +1,31 @@
+name: Build
+
+# GitHub Pages builds main on its own, but a failed build there is only
+# visible after the fact. This runs the same build on branches and pull
+# requests so a broken template is caught before it reaches the live site.
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+
+jobs:
+  jekyll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Build site
+        run: bundle exec jekyll build --trace
+
+      - name: Check expected pages exist
+        run: |
+          set -e
+          for f in _site/index.html _site/blog/index.html _site/feed.xml; do
+            test -s "$f" || { echo "missing or empty: $f"; exit 1; }
+          done
+          echo "all expected pages built"
