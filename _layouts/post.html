@@ -1,0 +1,32 @@
+---
+layout: default
+---
+<section id="post">
+  <div class="container">
+    <header class="major">
+      <h2>{{ page.title }}</h2>
+      <p class="post-meta">
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%b. %-d, %Y' }}</time>
+        {% if page.tags and page.tags.size > 0 %}
+        <span class="post-tags">
+          {% for tag in page.tags %}<a class="tag" href="{{ '/blog/' | relative_url }}#tag-{{ tag | slugify }}">{{ tag }}</a>{% endfor %}
+        </span>
+        {% endif %}
+      </p>
+    </header>
+
+    <article id="post-body" class="post-body">
+      {{ content }}
+    </article>
+
+    <nav class="post-nav">
+      <span class="post-nav-prev">
+        {% if page.previous %}<a href="{{ page.previous.url | relative_url }}">&larr; {{ page.previous.title }}</a>{% endif %}
+      </span>
+      <span class="post-nav-home"><a href="{{ '/blog/' | relative_url }}">All posts</a></span>
+      <span class="post-nav-next">
+        {% if page.next %}<a href="{{ page.next.url | relative_url }}">{{ page.next.title }} &rarr;</a>{% endif %}
+      </span>
+    </nav>
+  </div>
+</section>

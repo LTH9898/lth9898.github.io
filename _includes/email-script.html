@@ -1,0 +1,10 @@
+<script>
+  // Assemble the mailto at runtime so the address is not in the served HTML.
+  (function () {
+    var a = document.getElementById('email-link');
+    if (!a) return;
+    var addr = a.dataset.user + String.fromCharCode(64) + a.dataset.domain;
+    a.href = 'mailto:' + addr;
+    a.title = addr;
+  })();
+</script>
