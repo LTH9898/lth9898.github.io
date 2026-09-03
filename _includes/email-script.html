@@ -1,10 +1,13 @@
 <script>
-  // Assemble the mailto at runtime so the address is not in the served HTML.
+  // Assemble every mailto at runtime so the address is never in the served HTML.
   (function () {
-    var a = document.getElementById('email-link');
-    if (!a) return;
-    var addr = a.dataset.user + String.fromCharCode(64) + a.dataset.domain;
-    a.href = 'mailto:' + addr;
-    a.title = addr;
+    var links = document.querySelectorAll('#email-link, .email-inline');
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i];
+      if (!a.dataset.user || !a.dataset.domain) continue;
+      var addr = a.dataset.user + String.fromCharCode(64) + a.dataset.domain;
+      a.href = 'mailto:' + addr;
+      a.title = addr;
+    }
   })();
 </script>

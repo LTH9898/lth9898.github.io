@@ -23,6 +23,13 @@
       <!-- Footer -->
       {% include footer.html %}
     </div>
+    {% comment %}
+      skel injects style.css and its breakpoint variants into <head> at
+      runtime, so a <link> in <head> loses the cascade to them. Loading the
+      refinements here — later in document order — lets plain selectors
+      override the template without an !important on every rule.
+    {% endcomment %}
+    <link rel="stylesheet" href="{{ '/css/refine.css' | relative_url }}">
     {% include email-script.html %}
     {% if page.math %}{% include katex.html %}{% endif %}
   </body>

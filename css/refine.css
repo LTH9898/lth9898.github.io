@@ -1,0 +1,252 @@
+/*
+  Visual refinements layered on top of the Read Only template (css/style.css).
+
+  Kept deliberately restrained: the template's structure, maroon sidebar and
+  overall proportions are unchanged. What this file adjusts is the finish —
+  typography, spacing rhythm, rule weights, hover and focus states — so the
+  page reads as current without becoming a different design.
+
+  Loaded after style.css, so equal-specificity rules here win.
+*/
+
+:root {
+  --brand: #a31f34;
+  --brand-dark: #7f1828;
+  --ink: #2f3437;
+  --ink-soft: #5c6467;
+  --ink-faint: #949c9f;
+  --rule: #e9e7e5;
+  --rule-soft: #f2f0ee;
+}
+
+/* --------------------------------------------------------------- Typography */
+
+body,
+input,
+select,
+textarea {
+  color: var(--ink-soft);
+  font-size: 12.5pt;
+  letter-spacing: -0.003em;
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--ink);
+  letter-spacing: -0.018em;
+}
+
+header.major h2 {
+  color: var(--ink);
+  font-size: 1.6em;
+  letter-spacing: -0.025em;
+}
+
+header.major h2 + p {
+  color: var(--ink-faint);
+  font-size: 1em;
+}
+
+/* The section header sat tight against its body copy; give it room. */
+header.major {
+  margin-bottom: 1.6em;
+}
+
+#about h3 {
+  color: var(--ink);
+  font-size: 1.05em;
+  letter-spacing: 0.02em;
+  margin-top: 2.4em;
+  text-transform: uppercase;
+}
+
+::selection {
+  background: rgba(163, 31, 52, 0.15);
+}
+
+/* -------------------------------------------------------------------- Links */
+
+/*
+  The template underlines every link with a 1px border and flips it to pure
+  blue (#0000ff) on hover, which fights the maroon palette. Use a real
+  underline with an offset instead, and hover into the brand colour.
+*/
+a {
+  border-bottom: 0;
+  text-decoration: underline;
+  text-decoration-color: rgba(163, 31, 52, 0.28);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition:
+    color 0.18s ease,
+    text-decoration-color 0.18s ease;
+}
+
+a:hover {
+  color: var(--brand) !important;
+  text-decoration-color: var(--brand);
+}
+
+a:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Links that are chrome rather than prose carry no underline. */
+#nav a,
+#header a,
+.icons a,
+.tag,
+.post-list-title,
+.footer-logo a,
+a.lowkey {
+  text-decoration: none;
+}
+
+a.lowkey:hover,
+.post-list-title:hover {
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-underline-offset: 0.18em;
+}
+
+/* ------------------------------------------------------------------ Sections */
+
+/*
+  6px of solid grey between sections read as a hard chunk. A hairline plus
+  slightly tighter vertical padding gives the same separation more quietly.
+*/
+#main > section {
+  border-top: solid 1px var(--rule);
+}
+
+#main > section > .container {
+  padding: 4.5em 0 4em 0;
+}
+
+/* --------------------------------------------------------------------- News */
+
+#news table tbody tr {
+  border: 0;
+  border-bottom: solid 1px var(--rule-soft);
+}
+
+#news table tbody tr:last-child {
+  border-bottom: 0;
+}
+
+#news table tbody tr:nth-child(2n + 1) {
+  background: none;
+}
+
+#news table td,
+#news table th {
+  padding: 0.85em 0.75em;
+}
+
+#news .news-date {
+  color: var(--ink-faint);
+  font-size: 0.82em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------- Publications */
+
+.features .feature-item {
+  border-top: solid 1px var(--rule-soft);
+  border-radius: 5px;
+  margin-bottom: 0.25em;
+  padding: 1.25em 0.75em;
+  transition: background-color 0.18s ease;
+}
+
+.features .feature-item:hover {
+  background: #faf9f8;
+}
+
+.features .feature-item:first-child {
+  padding-top: 1.25em;
+}
+
+.features .feature-item .image img {
+  border: solid 1px var(--rule);
+  border-radius: 4px;
+  height: auto;
+}
+
+.author-self {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ------------------------------------------------------------------ Sidebar */
+
+#header > header .avatar img {
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.22);
+}
+
+#header > header h1 {
+  letter-spacing: -0.015em;
+}
+
+#nav ul li a {
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+#nav ul li a:not(.active):hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff !important;
+}
+
+#header footer .icons a {
+  opacity: 0.75;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+#header footer .icons a:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+/* ------------------------------------------------------------------- Footer */
+
+#footer {
+  background: #f6f5f4;
+  border-top: solid 1px var(--rule);
+  color: var(--ink-faint);
+}
+
+#footer .copyright {
+  font-size: 0.82em;
+}
+
+.footer-logo img {
+  border-radius: 12px;
+  max-width: 44px;
+  opacity: 0.9;
+}
+
+/* ------------------------------------------------------------------- Motion */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
