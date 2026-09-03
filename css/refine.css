@@ -268,6 +268,33 @@ table.invisible tbody.invisible tr.invisible:nth-child(2n + 1) {
 }
 
 /*
+  Text beside media. flex-basis on the text column does the responsive work:
+  when the card is too narrow to give the copy ~22em next to the clip, the
+  two wrap and stack on their own. That tracks the card width rather than the
+  viewport, which matters because the sidebar takes 22em off the former.
+*/
+.split {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5em 2.25em;
+}
+
+.split-text {
+  flex: 1 1 22em;
+  min-width: 0;
+}
+
+.split-text > *:first-child {
+  margin-top: 0;
+}
+
+.split-media {
+  flex: 0 1 auto;
+  margin: 0;
+}
+
+/*
   The clip is portrait (720x1280); left unconstrained it would tower over the
   card, so cap it and let the aspect ratio do the rest.
 */
