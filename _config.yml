@@ -32,6 +32,7 @@ defaults:
     values:
       layout: post
       math: true
+      blog_active: true
 
 exclude:
   - README.md

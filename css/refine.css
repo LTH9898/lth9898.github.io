@@ -1,22 +1,39 @@
 /*
-  Visual refinements layered on top of the Read Only template (css/style.css).
+  Visual layer over the Read Only template (css/style.css).
 
-  Kept deliberately restrained: the template's structure, maroon sidebar and
-  overall proportions are unchanged. What this file adjusts is the finish —
-  typography, spacing rhythm, rule weights, hover and focus states — so the
-  page reads as current without becoming a different design.
+  The template puts content in a fixed-width column against a white page with
+  the sidebar bleeding to the right edge. That column's side margins swing with
+  the viewport — roughly 33px at 1100px wide but 170px at 1440px — so the page
+  never sits at a consistent inset and reads as if it does not fit the window.
 
-  Loaded after style.css, so equal-specificity rules here win.
+  This file moves the layout to cards on a warm ground: the content sits in a
+  rounded panel with a fixed inset, and the sidebar becomes a floating panel
+  rather than a full-bleed edge. Margins are then the same at every width.
+
+  Loaded at the end of <body> because skel injects style.css and its breakpoint
+  variants into <head> at runtime; a <head> link would lose the cascade to them.
 */
 
 :root {
+  --ground: #f5f1ea;
+  --card: #fffdfa;
+  --card-edge: rgba(40, 25, 17, 0.07);
+  --card-shadow: 0 18px 48px rgba(40, 25, 17, 0.08);
+  --card-shadow-soft: 0 8px 24px rgba(40, 25, 17, 0.05);
+
   --brand: #a31f34;
-  --brand-dark: #7f1828;
-  --ink: #2f3437;
-  --ink-soft: #5c6467;
-  --ink-faint: #949c9f;
-  --rule: #e9e7e5;
-  --rule-soft: #f2f0ee;
+  --brand-deep: #7f1828;
+
+  --ink: #2d353c;
+  --ink-soft: #5b646b;
+  --ink-faint: #98a0a6;
+  --rule: #ece7e0;
+  --rule-soft: #f4f0ea;
+
+  --radius: 26px;
+  --radius-sm: 14px;
+  --inset: 26px;
+  --measure: 1000px;
 }
 
 /* --------------------------------------------------------------- Typography */
@@ -25,9 +42,12 @@ body,
 input,
 select,
 textarea {
+  background: var(--ground);
   color: var(--ink-soft);
+  font-family: 'Manrope', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
   font-size: 12.5pt;
-  letter-spacing: -0.003em;
+  letter-spacing: -0.005em;
   line-height: 1.72;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -40,13 +60,17 @@ h4,
 h5,
 h6 {
   color: var(--ink);
-  letter-spacing: -0.018em;
+  letter-spacing: -0.02em;
+}
+
+header.major {
+  margin-bottom: 1.5em;
 }
 
 header.major h2 {
   color: var(--ink);
-  font-size: 1.6em;
-  letter-spacing: -0.025em;
+  font-size: 1.55em;
+  letter-spacing: -0.028em;
 }
 
 header.major h2 + p {
@@ -54,15 +78,10 @@ header.major h2 + p {
   font-size: 1em;
 }
 
-/* The section header sat tight against its body copy; give it room. */
-header.major {
-  margin-bottom: 1.6em;
-}
-
 #about h3 {
   color: var(--ink);
-  font-size: 1.05em;
-  letter-spacing: 0.02em;
+  font-size: 0.92em;
+  letter-spacing: 0.08em;
   margin-top: 2.4em;
   text-transform: uppercase;
 }
@@ -74,14 +93,14 @@ header.major {
 /* -------------------------------------------------------------------- Links */
 
 /*
-  The template underlines every link with a 1px border and flips it to pure
-  blue (#0000ff) on hover, which fights the maroon palette. Use a real
-  underline with an offset instead, and hover into the brand colour.
+  The template underlines links with a 1px border and flips them to pure blue
+  on hover, which fights the palette. Use a real underline with an offset and
+  hover into the brand colour instead.
 */
 a {
   border-bottom: 0;
   text-decoration: underline;
-  text-decoration-color: rgba(163, 31, 52, 0.28);
+  text-decoration-color: rgba(163, 31, 52, 0.3);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
   transition:
@@ -95,12 +114,11 @@ a:hover {
 }
 
 a:focus-visible {
-  border-radius: 2px;
+  border-radius: 3px;
   outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 
-/* Links that are chrome rather than prose carry no underline. */
 #nav a,
 #header a,
 .icons a,
@@ -118,18 +136,58 @@ a.lowkey:hover,
   text-underline-offset: 0.18em;
 }
 
-/* ------------------------------------------------------------------ Sections */
+/* ------------------------------------------------------------------- Layout */
 
-/*
-  6px of solid grey between sections read as a hard chunk. A hairline plus
-  slightly tighter vertical padding gives the same separation more quietly.
-*/
+#wrapper {
+  background: transparent;
+}
+
+#main {
+  padding: var(--inset) var(--inset) 0 var(--inset);
+}
+
+/* Cards carry the separation now, so the dividing rules go. */
 #main > section {
-  border-top: solid 1px var(--rule);
+  border-top: 0;
+}
+
+#main > section > .container,
+#footer .container {
+  /*
+    skel sets .container width per breakpoint with !important (its "85%!"
+    syntax), which would leave the card narrower than the banner above it.
+    Match them by letting the card fill the padded main column instead.
+  */
+  width: auto !important;
 }
 
 #main > section > .container {
-  padding: 4.5em 0 4em 0;
+  background: var(--card);
+  border: solid 1px var(--card-edge);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  margin: 0 auto var(--inset) auto;
+  max-width: var(--measure);
+  padding: 2.75em 2.75em 2.5em 2.75em;
+}
+
+/*
+  The banner is #about:before, a block ahead of the card. Match its width and
+  round only its top so the two read as one panel.
+*/
+#about:before {
+  border: solid 1px var(--card-edge);
+  border-bottom: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  height: 13em;
+  margin: 0 auto;
+  max-width: var(--measure);
+  width: 100%;
+}
+
+#about > .container {
+  border-radius: 0 0 var(--radius) var(--radius);
+  border-top: 0;
 }
 
 /* --------------------------------------------------------------------- News */
@@ -149,39 +207,51 @@ a.lowkey:hover,
 
 #news table td,
 #news table th {
-  padding: 0.85em 0.75em;
+  padding: 0.8em 0.6em;
 }
 
 #news .news-date {
   color: var(--ink-faint);
-  font-size: 0.82em;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+/* The template pins this to 270px, leaving dead space with only a few items. */
+.news-scroll {
+  height: auto;
+  max-height: 270px;
+}
+
+/*
+  The "invisible" tables (Experiences) still paint a white row background,
+  which shows as a pale box now that the card is off-white.
+*/
+table.invisible tbody.invisible tr.invisible,
+table.invisible tbody.invisible tr.invisible:nth-child(2n + 1) {
+  background-color: transparent;
+  border: 0;
 }
 
 /* ------------------------------------------------------------- Publications */
 
 .features .feature-item {
-  border-top: solid 1px var(--rule-soft);
-  border-radius: 5px;
-  margin-bottom: 0.25em;
-  padding: 1.25em 0.75em;
+  border-top: 0;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5em;
+  padding: 1.1em;
   transition: background-color 0.18s ease;
 }
 
 .features .feature-item:hover {
-  background: #faf9f8;
-}
-
-.features .feature-item:first-child {
-  padding-top: 1.25em;
+  background: rgba(163, 31, 52, 0.035);
 }
 
 .features .feature-item .image img {
   border: solid 1px var(--rule);
-  border-radius: 4px;
+  border-radius: 8px;
   height: auto;
 }
 
@@ -193,27 +263,105 @@ a.lowkey:hover,
 
 /* ------------------------------------------------------------------ Sidebar */
 
+/*
+  Below the medium breakpoint skel turns the sidebar into an off-canvas panel
+  and resets its positioning, so the floating-panel treatment is desktop only.
+*/
+@media screen and (min-width: 1025px) {
+  /*
+    Keep the reserve on #wrapper rather than #main: #footer is a sibling of
+    #main, so margin on #main alone leaves the footer running under the
+    sidebar. 22em matches the narrowed panel below.
+  */
+  #wrapper {
+    padding-right: 22em;
+  }
+
+  #header {
+    background: transparent;
+    padding: var(--inset) var(--inset) var(--inset) 0;
+    right: 0;
+    width: 22em;
+  }
+
+  #header:before {
+    background: linear-gradient(170deg, var(--brand) 0%, var(--brand-deep) 100%);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    content: '';
+    inset: var(--inset) var(--inset) var(--inset) 0;
+    position: absolute;
+    z-index: -1;
+  }
+
+  #header > header {
+    padding: 2.5em 2em 1.75em 2em;
+  }
+
+  #header > footer {
+    padding: 2em 2em 2.5em 2em;
+  }
+
+  #header > nav {
+    padding: 0 1.25em;
+  }
+}
+
+/*
+  style.css caps and centres the layout above 1568px using a 23em sidebar. The
+  panel here is 22em, so both halves of that calculation have to be restated or
+  the wrapper ends up 1em wider than the space actually reserved and the footer
+  slides under the sidebar.
+*/
+@media screen and (min-width: 1568px) {
+  #wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: calc(1200px + 22em);
+  }
+
+  #header {
+    right: calc((100vw - (1200px + 22em)) / 2);
+  }
+}
+
 #header > header .avatar img {
-  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
 }
 
 #header > header h1 {
-  letter-spacing: -0.015em;
+  font-size: 1.5em;
+  letter-spacing: -0.02em;
 }
 
-#nav ul li a {
+/* Nav as pills rather than full-width bars with dividing rules. */
+#header > nav ul li {
+  border-top: 0;
+  margin-bottom: 0.35em;
+}
+
+#header > nav ul li a {
+  border-radius: var(--radius-sm);
+  font-size: 0.95em;
+  font-weight: 600;
+  padding: 0.7em 1em;
   transition:
     background-color 0.18s ease,
     color 0.18s ease;
 }
 
-#nav ul li a:not(.active):hover {
-  background: rgba(255, 255, 255, 0.09);
-  color: #fff !important;
+#header > nav ul li a:not(.active):hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+#header > nav ul li a.active {
+  background: #fffdfa;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+  color: var(--brand) !important;
 }
 
 #header footer .icons a {
-  opacity: 0.75;
+  opacity: 0.8;
   transition:
     opacity 0.18s ease,
     transform 0.18s ease;
@@ -227,19 +375,121 @@ a.lowkey:hover,
 /* ------------------------------------------------------------------- Footer */
 
 #footer {
-  background: #f6f5f4;
-  border-top: solid 1px var(--rule);
+  background: transparent;
+  border-top: 0;
   color: var(--ink-faint);
+  padding: 0 var(--inset) 2.5em var(--inset);
+}
+
+/* Line the footer up with the cards above it. */
+#footer .container {
+  margin: 0 auto;
+  max-width: var(--measure);
 }
 
 #footer .copyright {
-  font-size: 0.82em;
+  font-size: 0.8em;
+}
+
+#footer .copyright li {
+  border-left-color: var(--rule);
 }
 
 .footer-logo img {
   border-radius: 12px;
-  max-width: 44px;
+  max-width: 40px;
   opacity: 0.9;
+}
+
+/* -------------------------------------------------------------------- Blog */
+
+.post-list-item {
+  border-top-color: var(--rule-soft);
+}
+
+.post-list-date {
+  color: var(--ink-faint);
+}
+
+.post-list-title {
+  color: var(--ink);
+}
+
+.post-list-desc {
+  color: var(--ink-soft);
+}
+
+.tag {
+  background: rgba(163, 31, 52, 0.07);
+  border-radius: 999px;
+  color: #8a6a6f;
+  font-weight: 600;
+}
+
+a.tag:hover,
+.tag.is-active {
+  background: var(--brand);
+  color: #fff;
+}
+
+.tag-filter {
+  border-bottom-color: var(--rule);
+}
+
+.post-body pre {
+  border-radius: 10px;
+}
+
+/* The template's inline code is white on #555; our chip is light, so the
+   text colour has to come with it or it renders invisible. */
+.post-body code,
+code {
+  background: rgba(40, 25, 17, 0.06);
+  color: #7a3b48;
+}
+
+.post-body pre code,
+pre code {
+  background: none;
+  color: #e8e6e3;
+}
+
+.post-nav,
+.post-body hr,
+.post-body blockquote {
+  border-color: var(--rule);
+}
+
+/* --------------------------------------------------- Off-canvas chrome (<=1024px) */
+
+#titleBar {
+  background: var(--card);
+  border-bottom: solid 1px var(--rule);
+}
+
+#titleBar .title {
+  color: var(--ink);
+}
+
+#sidePanel {
+  background: var(--brand-deep);
+}
+
+/* ------------------------------------------------------------------- Narrow */
+
+@media screen and (max-width: 1024px) {
+  :root {
+    --inset: 14px;
+    --radius: 18px;
+  }
+
+  #main > section > .container {
+    padding: 2em 1.5em;
+  }
+
+  #about:before {
+    height: 10em;
+  }
 }
 
 /* ------------------------------------------------------------------- Motion */
