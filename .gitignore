@@ -10,3 +10,8 @@ _site/
 .sass-cache/
 vendor/
 .bundle/
+
+# Source media kept locally only; the site serves the converted files
+# (e.g. images/hobby.MOV -> images/misc/climbing.mp4)
+*.MOV
+*.mov

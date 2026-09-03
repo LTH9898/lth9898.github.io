@@ -35,6 +35,10 @@ defaults:
       blog_active: true
 
 exclude:
+  # Local-only source media. Not committed, but keep local builds matching
+  # what GitHub Pages produces rather than copying a 19MB file into _site.
+  - '*.MOV'
+  - '*.mov'
   - README.md
   - LICENSE.txt
   - Gemfile
